@@ -1,0 +1,88 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "why ticks",
+      "key": "why ticks",
+      "start_line": 4,
+      "end_line": 4,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 4,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Matched case-insensitively, whitespace collapsed."
+          ]
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "range",
+          "start": [
+            1,
+            19
+          ],
+          "end": [
+            1,
+            32
+          ],
+          "highlight": "spaced label"
+        },
+        {
+          "kind": "point",
+          "start": [
+            1,
+            66
+          ],
+          "end": [
+            2,
+            6
+          ],
+          "highlight": null
+        }
+      ]
+    },
+    {
+      "label": "Ünïcode Ä",
+      "key": "ünïcode ä",
+      "start_line": 16,
+      "end_line": 16,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 16,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Labels may contain any characters but brackets."
+          ]
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "point",
+          "start": [
+            18,
+            4
+          ],
+          "end": [
+            18,
+            19
+          ],
+          "highlight": null
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

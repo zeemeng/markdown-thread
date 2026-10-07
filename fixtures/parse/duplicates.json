@@ -1,0 +1,75 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "dup",
+      "key": "dup",
+      "start_line": 3,
+      "end_line": 3,
+      "state": "open",
+      "duplicate": true,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 3,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "First."
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "DUP",
+      "key": "dup",
+      "start_line": 5,
+      "end_line": 5,
+      "state": "open",
+      "duplicate": true,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 5,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Second."
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "unique",
+      "key": "unique",
+      "start_line": 7,
+      "end_line": 7,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 7,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Fine."
+          ]
+        }
+      ],
+      "anchors": []
+    }
+  ],
+  "errors": [
+    {
+      "code": "duplicate-label",
+      "line": 5
+    }
+  ]
+}

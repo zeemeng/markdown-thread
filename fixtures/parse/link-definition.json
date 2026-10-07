@@ -1,0 +1,43 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "docs",
+      "key": "docs",
+      "start_line": 3,
+      "end_line": 3,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 3,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "A thread whose label is also a link definition."
+          ]
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "point",
+          "start": [
+            1,
+            4
+          ],
+          "end": [
+            1,
+            11
+          ],
+          "highlight": null
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

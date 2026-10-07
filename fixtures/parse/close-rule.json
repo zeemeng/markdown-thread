@@ -1,0 +1,70 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "diff",
+      "key": "diff",
+      "start_line": 1,
+      "end_line": 11,
+      "state": "answered",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 1,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Please review this change:"
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 3,
+          "name": "Alice",
+          "timestamp": null,
+          "body": [
+            "--- a/dispatcher.py",
+            "+++ b/dispatcher.py",
+            "@@ -1 +1 @@",
+            "-TICK = 5",
+            "+TICK = 1"
+          ]
+        },
+        {
+          "kind": "responder",
+          "line": 10,
+          "name": "agent/model-x",
+          "timestamp": "2026-10-06T20:10-04:00",
+          "body": [
+            "Looks right."
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "second-line",
+      "key": "second-line",
+      "start_line": 13,
+      "end_line": 14,
+      "state": "closed",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "close",
+          "line": 14,
+          "name": "Alice",
+          "timestamp": null,
+          "reason": "closed on the second line"
+        }
+      ],
+      "anchors": []
+    }
+  ],
+  "errors": []
+}

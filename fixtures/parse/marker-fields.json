@@ -1,0 +1,148 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "fields",
+      "key": "fields",
+      "start_line": 1,
+      "end_line": 39,
+      "state": "closed",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 1,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Opener."
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 3,
+          "name": "Alice Smith",
+          "timestamp": "2026-10-06T20:03-04:00",
+          "body": [
+            "Name with a space, full timestamp."
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 6,
+          "name": "@alice:example.org",
+          "timestamp": null,
+          "body": [
+            "A Matrix id is a name: the @ is followed by a letter."
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 9,
+          "name": "Alice",
+          "timestamp": "2026-10-06",
+          "body": [
+            "The @ may touch a digit."
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 12,
+          "name": "Alice",
+          "timestamp": null,
+          "body": [
+            "Not a timestamp, so there is none."
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 15,
+          "name": "Alice",
+          "timestamp": "2026-10-06T20:03",
+          "body": [
+            "Text after the timestamp is ignored."
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 18,
+          "name": "Alice",
+          "timestamp": "2026-10-06T20:03",
+          "body": [
+            "An incomplete offset is ignored too."
+          ]
+        },
+        {
+          "kind": "responder",
+          "line": 21,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "A responder without a name or time."
+          ]
+        },
+        {
+          "kind": "close",
+          "line": 24,
+          "name": null,
+          "timestamp": null,
+          "reason": "wontfix"
+        },
+        {
+          "kind": "annotator",
+          "line": 26,
+          "name": "Alice",
+          "timestamp": null,
+          "body": [
+            "Reopen."
+          ]
+        },
+        {
+          "kind": "close",
+          "line": 29,
+          "name": "Alice",
+          "timestamp": null,
+          "reason": "see you @ home"
+        },
+        {
+          "kind": "annotator",
+          "line": 31,
+          "name": "Alice",
+          "timestamp": null,
+          "body": [
+            "Reopen."
+          ]
+        },
+        {
+          "kind": "close",
+          "line": 34,
+          "name": "Alice! Smith",
+          "timestamp": "2026-10-07",
+          "reason": null
+        },
+        {
+          "kind": "annotator",
+          "line": 36,
+          "name": "Alice",
+          "timestamp": null,
+          "body": [
+            "Reopen."
+          ]
+        },
+        {
+          "kind": "close",
+          "line": 39,
+          "name": null,
+          "timestamp": "2026-10-07T09:00Z",
+          "reason": "done"
+        }
+      ],
+      "anchors": []
+    }
+  ],
+  "errors": []
+}

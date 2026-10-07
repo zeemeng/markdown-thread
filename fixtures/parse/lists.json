@@ -1,0 +1,94 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "item one",
+      "key": "item one",
+      "start_line": 3,
+      "end_line": 6,
+      "state": "answered",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 3,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Indented to the item's text column."
+          ]
+        },
+        {
+          "kind": "responder",
+          "line": 5,
+          "name": "agent/model-x",
+          "timestamp": "2026-10-06T20:30-04:00",
+          "body": [
+            "Answer inside the list."
+          ]
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "range",
+          "start": [
+            1,
+            31
+          ],
+          "end": [
+            1,
+            42
+          ],
+          "highlight": "a claim"
+        }
+      ]
+    },
+    {
+      "label": "item two",
+      "key": "item two",
+      "start_line": 10,
+      "end_line": 12,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 10,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "A thread whose lines are indented differently."
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 11,
+          "name": "Alice",
+          "timestamp": null,
+          "body": [
+            "Mixed indentation."
+          ]
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "point",
+          "start": [
+            8,
+            15
+          ],
+          "end": [
+            8,
+            26
+          ],
+          "highlight": null
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

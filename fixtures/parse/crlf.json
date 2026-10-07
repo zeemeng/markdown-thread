@@ -1,0 +1,52 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "crlf",
+      "key": "crlf",
+      "start_line": 3,
+      "end_line": 6,
+      "state": "answered",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 3,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "CRLF line endings."
+          ]
+        },
+        {
+          "kind": "responder",
+          "line": 5,
+          "name": "agent/model-x",
+          "timestamp": "2026-10-06T20:40-04:00",
+          "body": [
+            "Reply."
+          ]
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "range",
+          "start": [
+            1,
+            14
+          ],
+          "end": [
+            1,
+            21
+          ],
+          "highlight": "here"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

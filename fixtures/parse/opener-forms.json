@@ -1,0 +1,122 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "a",
+      "key": "a",
+      "start_line": 3,
+      "end_line": 3,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 3,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Is this the short form?"
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "b",
+      "key": "b",
+      "start_line": 7,
+      "end_line": 10,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 7,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "First line of the opener",
+            "continues here.",
+            "",
+            "Second paragraph of the opener."
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "c",
+      "key": "c",
+      "start_line": 14,
+      "end_line": 15,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 14,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "The opener starts on the second line."
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "d",
+      "key": "d",
+      "start_line": 19,
+      "end_line": 21,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "annotator",
+          "line": 20,
+          "name": "Alice Smith",
+          "timestamp": "2026-10-06T20:03-04:00",
+          "body": [
+            "The long form carries a name and a time."
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "e",
+      "key": "e",
+      "start_line": 25,
+      "end_line": 28,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 25,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Opener on the header."
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 27,
+          "name": "Alice",
+          "timestamp": null,
+          "body": [
+            "A follow-up before any reply."
+          ]
+        }
+      ],
+      "anchors": []
+    }
+  ],
+  "errors": []
+}

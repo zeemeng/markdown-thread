@@ -1,0 +1,217 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "h",
+      "key": "h",
+      "start_line": 19,
+      "end_line": 19,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 19,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Heading thread."
+          ]
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "range",
+          "start": [
+            1,
+            31
+          ],
+          "end": [
+            1,
+            35
+          ],
+          "highlight": "a highlight"
+        }
+      ]
+    },
+    {
+      "label": "r",
+      "key": "r",
+      "start_line": 21,
+      "end_line": 21,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 21,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Range thread."
+          ]
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "range",
+          "start": [
+            3,
+            14
+          ],
+          "end": [
+            3,
+            18
+          ],
+          "highlight": "Same line"
+        },
+        {
+          "kind": "range",
+          "start": [
+            3,
+            32
+          ],
+          "end": [
+            3,
+            36
+          ],
+          "highlight": "no space"
+        },
+        {
+          "kind": "range",
+          "start": [
+            3,
+            54
+          ],
+          "end": [
+            3,
+            58
+          ],
+          "highlight": "two spaces"
+        },
+        {
+          "kind": "range",
+          "start": [
+            5,
+            0
+          ],
+          "end": [
+            5,
+            4
+          ],
+          "highlight": "wrapped before the anchor"
+        },
+        {
+          "kind": "range",
+          "start": [
+            6,
+            12
+          ],
+          "end": [
+            6,
+            16
+          ],
+          "highlight": "multi-line highlight"
+        },
+        {
+          "kind": "range",
+          "start": [
+            9,
+            10
+          ],
+          "end": [
+            9,
+            14
+          ],
+          "highlight": "First"
+        },
+        {
+          "kind": "range",
+          "start": [
+            17,
+            18
+          ],
+          "end": [
+            17,
+            22
+          ],
+          "highlight": "text"
+        }
+      ]
+    },
+    {
+      "label": "p",
+      "key": "p",
+      "start_line": 23,
+      "end_line": 23,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 23,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Point thread."
+          ]
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "point",
+          "start": [
+            8,
+            35
+          ],
+          "end": [
+            8,
+            39
+          ],
+          "highlight": null
+        },
+        {
+          "kind": "point",
+          "start": [
+            8,
+            72
+          ],
+          "end": [
+            8,
+            76
+          ],
+          "highlight": null
+        },
+        {
+          "kind": "point",
+          "start": [
+            9,
+            15
+          ],
+          "end": [
+            9,
+            19
+          ],
+          "highlight": null
+        },
+        {
+          "kind": "point",
+          "start": [
+            15,
+            18
+          ],
+          "end": [
+            15,
+            22
+          ],
+          "highlight": null
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

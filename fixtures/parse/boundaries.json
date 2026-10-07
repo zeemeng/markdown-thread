@@ -1,0 +1,78 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "glued",
+      "key": "glued",
+      "start_line": 2,
+      "end_line": 2,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 2,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "A thread right after a paragraph line."
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "first",
+      "key": "first",
+      "start_line": 5,
+      "end_line": 6,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 5,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "One quote, two headers.",
+            "[?second] This line is message text of the first thread."
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "after-close",
+      "key": "after-close",
+      "start_line": 8,
+      "end_line": 11,
+      "state": "closed",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 8,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Question."
+          ]
+        },
+        {
+          "kind": "close",
+          "line": 10,
+          "name": "Alice",
+          "timestamp": null,
+          "reason": null
+        }
+      ],
+      "anchors": []
+    }
+  ],
+  "errors": []
+}

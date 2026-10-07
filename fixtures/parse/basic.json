@@ -1,0 +1,77 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "why ticks",
+      "key": "why ticks",
+      "start_line": 3,
+      "end_line": 14,
+      "state": "closed",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 3,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Why poll instead of reacting to events?"
+          ]
+        },
+        {
+          "kind": "responder",
+          "line": 5,
+          "name": "agent/model-x",
+          "timestamp": "2026-10-06T19:57-04:00",
+          "body": [
+            "Polling keeps the dispatcher stateless across restarts."
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 8,
+          "name": "Alice",
+          "timestamp": "2026-10-06T20:03",
+          "body": [
+            "Fair, but five seconds is slow."
+          ]
+        },
+        {
+          "kind": "responder",
+          "line": 11,
+          "name": "agent/model-x",
+          "timestamp": "2026-10-06T20:05-04:00",
+          "body": [
+            "One second would cost about 2 % CPU; I can measure it."
+          ]
+        },
+        {
+          "kind": "close",
+          "line": 14,
+          "name": "Alice",
+          "timestamp": "2026-10-06",
+          "reason": "keep five seconds for now"
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "range",
+          "start": [
+            1,
+            44
+          ],
+          "end": [
+            1,
+            56
+          ],
+          "highlight": "polls every five seconds"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

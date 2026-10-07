@@ -1,0 +1,141 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "empty",
+      "key": "empty",
+      "start_line": 1,
+      "end_line": 1,
+      "state": "empty",
+      "duplicate": false,
+      "messages": [],
+      "anchors": []
+    },
+    {
+      "label": "open",
+      "key": "open",
+      "start_line": 3,
+      "end_line": 3,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 3,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Question."
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "answered",
+      "key": "answered",
+      "start_line": 5,
+      "end_line": 8,
+      "state": "answered",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 5,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Question."
+          ]
+        },
+        {
+          "kind": "responder",
+          "line": 7,
+          "name": "agent/model-x",
+          "timestamp": "2026-10-06T20:00-04:00",
+          "body": [
+            "Answer."
+          ]
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "closed",
+      "key": "closed",
+      "start_line": 10,
+      "end_line": 15,
+      "state": "closed",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 10,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Question."
+          ]
+        },
+        {
+          "kind": "responder",
+          "line": 12,
+          "name": "agent/model-x",
+          "timestamp": "2026-10-06T20:00-04:00",
+          "body": [
+            "Answer."
+          ]
+        },
+        {
+          "kind": "close",
+          "line": 15,
+          "name": null,
+          "timestamp": null,
+          "reason": null
+        }
+      ],
+      "anchors": []
+    },
+    {
+      "label": "reopened",
+      "key": "reopened",
+      "start_line": 17,
+      "end_line": 22,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 17,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Question."
+          ]
+        },
+        {
+          "kind": "close",
+          "line": 19,
+          "name": "Alice",
+          "timestamp": null,
+          "reason": "premature"
+        },
+        {
+          "kind": "annotator",
+          "line": 21,
+          "name": "Alice",
+          "timestamp": null,
+          "body": [
+            "Actually, one more thing."
+          ]
+        }
+      ],
+      "anchors": []
+    }
+  ],
+  "errors": []
+}

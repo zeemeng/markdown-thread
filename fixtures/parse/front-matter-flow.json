@@ -1,0 +1,30 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": true,
+    "autoremove_closed": true
+  },
+  "threads": [
+    {
+      "label": "x",
+      "key": "x",
+      "start_line": 5,
+      "end_line": 5,
+      "state": "open",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 5,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "Question."
+          ]
+        }
+      ],
+      "anchors": []
+    }
+  ],
+  "errors": []
+}

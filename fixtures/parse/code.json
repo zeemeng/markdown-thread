@@ -1,0 +1,80 @@
+{
+  "spec": "0.1",
+  "front_matter": {
+    "present": false,
+    "autoremove_closed": false
+  },
+  "threads": [
+    {
+      "label": "real",
+      "key": "real",
+      "start_line": 21,
+      "end_line": 34,
+      "state": "answered",
+      "duplicate": false,
+      "messages": [
+        {
+          "kind": "opener",
+          "line": 21,
+          "name": null,
+          "timestamp": null,
+          "body": [
+            "The only thread."
+          ]
+        },
+        {
+          "kind": "annotator",
+          "line": 23,
+          "name": "Alice",
+          "timestamp": null,
+          "body": [
+            "A message with code:",
+            "",
+            "```text",
+            "--> not a marker",
+            "<-- not a marker",
+            "",
+            "+++ not a close",
+            "```"
+          ]
+        },
+        {
+          "kind": "responder",
+          "line": 33,
+          "name": "agent/model-x",
+          "timestamp": "2026-10-06T20:20-04:00",
+          "body": [
+            "Reply after the fence."
+          ]
+        }
+      ],
+      "anchors": [
+        {
+          "kind": "point",
+          "start": [
+            42,
+            5
+          ],
+          "end": [
+            42,
+            12
+          ],
+          "highlight": null
+        },
+        {
+          "kind": "point",
+          "start": [
+            45,
+            50
+          ],
+          "end": [
+            45,
+            57
+          ],
+          "highlight": null
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
