@@ -32,7 +32,7 @@ TIMESTAMP_RE = re.compile(                                # §5.3
     r"\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})?)?")
 FULL_TIMESTAMP_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})$")
 HIGHLIGHT_RE = re.compile(r"==(?!\s)((?:(?!==).)+?)(?<!\s)==", re.S)  # §7.1
-CODE_SPAN_RE = re.compile(r"(`+)(?!`)(.+?)(?<!`)\1(?!`)")
+CODE_SPAN_RE = re.compile(r"(?<!`)(`+)(?!`)(.+?)(?<!`)\1(?!`)")  # maximal backtick runs
 BLOCK_START_RE = re.compile(                              # §7.1 block of body text
     r"^[ \t]*(?:>[ \t]?)*[ \t]*(?:#|[-*+][ \t]|\d+[.)][ \t]|"
     r"(?:\*[ \t]*){3,}$|(?:-[ \t]*){3,}$|(?:_[ \t]*){3,}$)")

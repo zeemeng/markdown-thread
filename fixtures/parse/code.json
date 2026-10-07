@@ -8,14 +8,14 @@
     {
       "label": "real",
       "key": "real",
-      "start_line": 21,
-      "end_line": 34,
+      "start_line": 23,
+      "end_line": 36,
       "state": "answered",
       "duplicate": false,
       "messages": [
         {
           "kind": "opener",
-          "line": 21,
+          "line": 23,
           "name": null,
           "timestamp": null,
           "body": [
@@ -24,7 +24,7 @@
         },
         {
           "kind": "annotator",
-          "line": 23,
+          "line": 25,
           "name": "Alice",
           "timestamp": null,
           "body": [
@@ -40,7 +40,7 @@
         },
         {
           "kind": "responder",
-          "line": 33,
+          "line": 35,
           "name": "agent/model-x",
           "timestamp": "2026-10-06T20:20-04:00",
           "body": [
@@ -52,11 +52,23 @@
         {
           "kind": "point",
           "start": [
-            42,
+            15,
+            41
+          ],
+          "end": [
+            15,
+            48
+          ],
+          "highlight": null
+        },
+        {
+          "kind": "point",
+          "start": [
+            44,
             5
           ],
           "end": [
-            42,
+            44,
             12
           ],
           "highlight": null
@@ -64,11 +76,11 @@
         {
           "kind": "point",
           "start": [
-            45,
+            47,
             50
           ],
           "end": [
-            45,
+            47,
             57
           ],
           "highlight": null

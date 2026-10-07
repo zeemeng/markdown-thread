@@ -12,6 +12,8 @@ An anchor-like [?real] inside code.
 ~~~
 
 Inline `[?real]` code spans and <!-- [?real] --> comments are not anchors.
+An unbalanced ``run` is no code span, so [?real] here is an anchor.
+A span ``with ` inside [?real]`` hides its token.
 <!--
 > [?commented] A multi-line comment hides this quote.
 >
