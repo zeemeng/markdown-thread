@@ -1,6 +1,6 @@
 # Markdown Thread — Specification
 
-Version 0.1 (draft, 2026-10-06)
+Version 0.2 (draft, 2026-10-08)
 
 Markdown Thread is a plain-text convention for discussion threads inside a
 Markdown document. A thread is a block quote placed near the text it discusses;
@@ -36,9 +36,8 @@ closing line. Its state is closed (§6).
 
 ## 2. Terms
 
-- **Annotator**: whoever opens a thread or writes `-->` messages, usually a
-  person.
-- **Responder**: whoever answers with `<--` messages, usually an AI agent. A
+- **Annotator**: whoever writes `-->` messages, usually a person.
+- **Responder**: whoever writes `<--` messages, usually an AI agent. A
   responder may also be a person.
 - **Content line**: a line of a block quote with its quote marker removed
   (§3.1).
@@ -307,7 +306,8 @@ false, it MUST NOT remove threads unless asked.
 A responder:
 
 1. writes only when asked to process a document;
-2. replies only to `open` threads, once each per request;
+2. replies only to `open` threads, once each per request, unless explicitly
+   asked to reply to a closed thread, which makes it `answered` (§6);
 3. MUST NOT change existing messages, labels, anchors or body text unless a
    thread or the user asks for it; it SHOULD propose such changes in a reply
    first;

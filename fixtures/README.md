@@ -1,6 +1,6 @@
 # Conformance fixtures
 
-Implementation-independent test cases for SPEC.md v0.1. Any implementation
+Implementation-independent test cases for SPEC.md v0.2. Any implementation
 should reproduce them exactly.
 
 ## `parse/`
@@ -14,7 +14,7 @@ Parse result (comments added for explanation):
 
 ```jsonc
 {
-  "spec": "0.1",
+  "spec": "0.2",
   "front_matter": { "present": true, "autoremove_closed": false },
   "threads": [
     {
@@ -61,6 +61,12 @@ Parse result (comments added for explanation):
 Operations:
 
 - `{"op": "reply", "label", "name", "timestamp", "body"}` (§8.1)
+- `{"op": "ask", "label", "name", "timestamp", "body", "line"?, "text"?}`
+  (not a spec operation: the reference implementation's question thread, a
+  label-only header and `<--` as the second line; anchor at the end of
+  `line` or `==text==` around its first occurrence there, thread after the
+  paragraph among its threads in anchor order; without `line`, at the end
+  of the document)
 - `{"op": "close", "label", "name"?, "timestamp"?, "reason"?}` (§8.2)
 - `{"op": "remove", "labels": [...]}` or `{"op": "remove", "closed": true}`
   (§8.3, including the reference implementation's tidy rules)
@@ -89,6 +95,9 @@ Operations:
 | `ops/reply-basic` | multi-paragraph reply |
 | `ops/reply-after-blank` | thread already ends with a blank `>` line |
 | `ops/reply-in-list` | indented thread, case-insensitive label, code in the reply |
+| `ops/ask-text` | `==text==` anchor on a continuation line; thread after the paragraph's existing thread |
+| `ops/ask-in-list` | point anchor in a list item, indented thread, multi-paragraph question |
+| `ops/ask-document` | whole-document question at the end; trailing blank lines collapsed |
 | `ops/close-fields` | name, timestamp and reason |
 | `ops/close-bare` | `+++` alone |
 | `ops/remove-closed` | range, wrapped, point and line-start anchors; threads at start and end |

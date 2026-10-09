@@ -1,0 +1,8 @@
+{
+  "op": "ask",
+  "label": "retry cap",
+  "name": "agent/model-x",
+  "timestamp": "2026-10-08T15:00-04:00",
+  "line": 2,
+  "body": "Three for every error, or only for timeouts?\n\nThe code retries all errors today."
+}

@@ -1,4 +1,6 @@
 """Reference implementation: helpers and command-line behaviour."""
+import contextlib
+import io
 import json
 import os
 import re
@@ -114,8 +116,14 @@ class Cli(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("is closed, not open", err)
         code, out, _ = cli("reply", closed, "q", "--name", "bot", "--body", "x", "--force",
-                           "--timestamp", "2026-10-06T21:00-04:00")
+                           "--timestamp", "2026-10-06T21:00-04:00", "--write")
         self.assertEqual(code, 0)
+        # now answered: --force does not reach answered (or empty) threads (SPEC §9 rule 2)
+        for path in (closed, self.doc("> [?e]\n", "empty.md")):
+            code, _, err = cli("reply", path, "q" if path == closed else "e", "--name", "bot",
+                               "--body", "x", "--force", "--write")
+            self.assertEqual(code, 1)
+            self.assertIn("--force works only on closed threads", err)
         dup = str(FIXTURES / "parse" / "duplicates.md")
         code, _, err = cli("reply", dup, "dup", "--name", "bot", "--body", "x")
         self.assertEqual((code, "duplicated" in err), (1, True))
@@ -159,6 +167,91 @@ class Cli(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(read(path), read(FIXTURES / "ops" / "remove-closed.out.md"))
         self.assertEqual(len(re.findall(r"^remove ", out, re.M)), 3)
+
+    def test_ask_write_makes_an_answered_thread(self):
+        path = self.doc("Intro.\n\nThe cap is three.\n")
+        code, out, _ = cli("ask", path, "cap", "--name", "agent/x", "--line", "3",
+                           "--text", "three", "--body", "Why three?", "--write")
+        self.assertEqual((code, out.strip()), (0, f"wrote {path}"))
+        doc = mdthread.Document(read(path))
+        t = doc.find("cap")
+        self.assertEqual((t.state, len(t.anchors), t.anchors[0].kind), ("answered", 1, "range"))
+        self.assertRegex(t.messages[0].timestamp, mdthread.FULL_TIMESTAMP_RE)
+        # the user's follow-up reopens it for the next pass
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(">\n> --> Max\n> Load tests chose it.\n")
+        self.assertEqual(mdthread.Document(read(path)).find("cap").state, "open")
+
+    def test_ask_thread_order_follows_anchors(self):
+        """Threads after a paragraph come out in anchor order, whatever order
+        the questions are asked in (bottom-up keeps line numbers valid)."""
+        orders = [["c", "b", "a"], ["a", "b", "c"], ["b", "a", "c"]]
+        words = {"a": (1, "One"), "b": (1, "two"), "c": (2, "three")}
+        for order in orders:
+            with self.subTest(order=order):
+                path = self.doc("One two\nthree.\n\nNext.\n")
+                for label in order:
+                    line, text = words[label]
+                    code, _, err = cli("ask", path, label, "--name", "a/x", "--line", str(line),
+                                       "--text", text, "--body", "Q?", "--write")
+                    self.assertEqual(code, 0, err)
+                doc = mdthread.Document(read(path))
+                self.assertEqual([t.label for t in doc.threads], ["a", "b", "c"])
+                self.assertTrue(read(path).endswith("> Q?\n\nNext.\n"))
+        # a thread without anchors that already follows the paragraph stays first
+        path = self.doc("One two.\n\n> [?first] x\n")
+        cli("ask", path, "z", "--name", "a/x", "--line", "1", "--text", "One", "--body", "Q?", "--write")
+        self.assertEqual([t.label for t in mdthread.Document(read(path)).threads], ["first", "z"])
+
+    def test_ask_crlf(self):
+        path = self.doc("One.\r\nTwo.\r\n")
+        code, _, err = cli("ask", path, "q", "--name", "a/x", "--line", "1", "--body", "Hm?",
+                           "--timestamp", "2026-10-08T15:00-04:00", "--write")
+        self.assertEqual(code, 0, err)
+        self.assertEqual(read(path), "One. [?q]\r\nTwo.\r\n\r\n> [?q]\r\n"
+                                     "> <-- a/x @ 2026-10-08T15:00-04:00\r\n> Hm?\r\n")
+
+    def test_ask_refusals(self):
+        text = ("Body [?stray] text `code`.\n\n> [?q] Why?\n\n```\nfenced\n```\n\n"
+                "[?linked]: https://example.org\n")
+        path = self.doc(text)
+        cases = [
+            (["q", "--line", "1"], "already used by the thread at line 3"),
+            (["Q  ", "--line", "1"], "already used"),
+            (["a]b"], "without [ or ]"),
+            (["new", "--line", "3"], "not body text"),
+            (["new", "--line", "6"], "not body text"),
+            (["new", "--line", "2"], "not body text"),
+            (["new", "--line", "99"], "not body text"),
+            (["new", "--line", "1", "--text", "code"], "does not occur"),
+            (["new", "--line", "1", "--text", " text"], "surrounding spaces"),
+            (["new", "--text", "Body"], "--text needs --line"),
+            (["stray", "--line", "1"], "would not make a clean new thread"),
+            (["linked"], "errors or warnings"),
+        ]
+        for args, msg in cases:
+            with self.subTest(args=args):
+                code, _, err = cli("ask", path, *args, "--name", "a/x", "--body", "Hm?", "--write")
+                self.assertEqual(code, 1)
+                self.assertIn(msg, err)
+        self.assertEqual(read(path), text)
+        code, _, err = cli("ask", path, "new", "--name", " ", "--body", "Hm?")
+        self.assertIn("responder name is required", err)
+        code, _, err = cli("ask", path, "new", "--name", "a/x", "--body", "\n")
+        self.assertIn("body is empty", err)
+
+    def test_write_refuses_a_file_changed_since_reading(self):
+        path = self.doc("> [?q] Why?\n")
+        doc = mdthread.Document(read(path))
+        new = mdthread.reply(doc, "q", "a/x", "Because.", "2026-10-08T15:00-04:00")
+        with open(path, "a", encoding="utf-8") as f:
+            f.write("\nEdited meanwhile.\n")
+        with self.assertRaises(mdthread.MdThreadError):
+            mdthread._emit(path, doc.text, new, True)
+        self.assertEqual(read(path), "> [?q] Why?\n\nEdited meanwhile.\n")
+        with contextlib.redirect_stdout(io.StringIO()):
+            mdthread._emit(path, read(path), "x\n", True)
+        self.assertEqual(read(path), "x\n")
 
     def test_now(self):
         code, out, _ = cli("now")

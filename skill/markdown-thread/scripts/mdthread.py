@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""mdthread: reference implementation of the Markdown Thread spec v0.1.
+"""mdthread: reference implementation of the Markdown Thread spec v0.2.
 
 Parses threads, anchors and states (SPEC.md), reports diagnostics, and edits
-documents: reply, close, remove. Standard library only; Python 3.10+.
+documents: reply, ask, close, remove. Standard library only; Python 3.10+.
 
 Positions in JSON output: lines are 1-based; columns are 0-based UTF-8 byte
 offsets, end exclusive.
@@ -18,7 +18,12 @@ import re
 import sys
 import unicodedata
 
-SPEC_VERSION = "0.1"
+try:
+    import fcntl                # POSIX: lock the file while checking and writing
+except ImportError:             # pragma: no cover
+    fcntl = None
+
+SPEC_VERSION = "0.2"
 
 # --- lexical rules (SPEC §3-§7) ----------------------------------------------
 
@@ -283,7 +288,7 @@ class Document:
                 im = LABEL_TOKEN_RE.match(first[inner.end():])
                 if im and label_key(im.group(1)):
                     self.diag("warning", "nested-thread", s,
-                              "threads nested in block quotes are not supported in v0.1")
+                              "threads nested in block quotes are not supported in v0.2")
             return
         prefix = self.lines[s][:self.lines[s].index(">") + 1]
         t = Thread(tm.group(1), label_key(tm.group(1)), s, e, prefix)
@@ -531,11 +536,8 @@ def _append_lines(doc: Document, t: Thread, new: list[str]) -> str:
     return doc.text[:insert_at] + "".join(nl + q for q in quoted) + doc.text[insert_at:]
 
 
-def reply(doc: Document, label: str, name: str, body: str, timestamp: str | None = None,
-          force: bool = False) -> str:
-    t = doc.find(label)
-    if t.state != "open" and not force:
-        raise MdThreadError(f"thread {t.label!r} is {t.state}, not open (use --force)")
+def _responder_message(name: str, body: str, timestamp: str | None) -> list[str]:
+    """`<--` marker line plus body lines (§8.1 steps 2-3), unquoted."""
     if not name or not name.strip():
         raise MdThreadError("a responder name is required")
     ts = timestamp or now_timestamp()
@@ -543,8 +545,19 @@ def reply(doc: Document, label: str, name: str, body: str, timestamp: str | None
         raise MdThreadError(f"timestamp {ts!r} is not the full form YYYY-MM-DDTHH:MM[:SS]±HH:MM")
     lines = body.rstrip("\n").split("\n")
     if not any(l.strip() for l in lines):
-        raise MdThreadError("reply body is empty")
-    return _append_lines(doc, t, [f"<-- {name.strip()} @ {ts}"] + [l.rstrip() for l in lines])
+        raise MdThreadError("message body is empty")
+    return [f"<-- {name.strip()} @ {ts}"] + [l.rstrip() for l in lines]
+
+
+def reply(doc: Document, label: str, name: str, body: str, timestamp: str | None = None,
+          force: bool = False) -> str:
+    t = doc.find(label)
+    if t.state != "open" and not (force and t.state == "closed"):
+        hint = (" (--force only when the user explicitly asks you to reply to it)"
+                if t.state == "closed" else
+                "; --force works only on closed threads (SPEC §9 rule 2)" if force else "")
+        raise MdThreadError(f"thread {t.label!r} is {t.state}, not open{hint}")
+    return _append_lines(doc, t, _responder_message(name, body, timestamp))
 
 
 def close(doc: Document, label: str, name: str | None = None, timestamp: str | None = None,
@@ -564,6 +577,104 @@ def close(doc: Document, label: str, name: str | None = None, timestamp: str | N
     if reason:
         line += " ! " + reason.strip()
     return _append_lines(doc, t, [line])
+
+
+LIST_ITEM_RE = re.compile(r"^[ \t]*(?:[-*+]|\d+[.)])[ \t]+")
+TRAILING_BLANK_RE = re.compile(r"(?:\r?\n[ \t]*)*\Z")
+
+
+def ask(doc: Document, label: str, name: str, body: str, timestamp: str | None = None,
+        line: int | None = None, text: str | None = None) -> str:
+    """Open a thread whose first message is a responder question: a header
+    with the label only, then `<--` as the second line (state `answered`).
+    Not an operation of the spec; it only writes what §4-§6 already allow.
+
+    line (1-based) is a body line the question is about: the anchor goes at
+    its end, or `==text== [?label]` around the first occurrence of text on
+    it; the thread goes after that paragraph, among the threads already
+    following it in anchor order. Without line the thread is about the whole
+    document and goes at the end."""
+    key = label_key(label)
+    if not key or "[" in label or "]" in label:
+        raise MdThreadError("a label is non-empty text without [ or ]")
+    label = " ".join(label.split())
+    for t in doc.threads:
+        if t.key == key:
+            raise MdThreadError(f"label {label!r} is already used by the thread at line "
+                                f"{t.start + 1}; reply there or choose another label")
+    message = _responder_message(name, body, timestamp)
+    crlf = doc.raw[0].endswith("\r")
+    cr = "\r" if crlf else ""
+
+    def thread_lines(indent: str) -> list[str]:
+        prefix = indent + ">"
+        return [f"{prefix} [?{label}]"] + [prefix + (" " + c if c else "") for c in message]
+
+    if line is None:
+        if text is not None:
+            raise MdThreadError("--text needs --line")
+        head = TRAILING_BLANK_RE.sub("", doc.text)
+        nl = "\r\n" if crlf else "\n"
+        new = (head + nl + nl if head else "") + nl.join(thread_lines("")) + nl
+        expect_anchors = 0
+    else:
+        i = line - 1
+        if not 0 <= i < doc.n or doc.kind[i] != "body" or i in doc.quote_code \
+                or is_blank(doc.lines[i]):
+            raise MdThreadError(f"line {line} is not body text (code, front matter, a thread "
+                                f"or blank)")
+        src = doc.lines[i]
+        if text is not None:
+            if not text or text != text.strip() or "==" in text or "\n" in text:
+                raise MdThreadError("--text must be one line without surrounding spaces or ==")
+            at = doc.masked[i].find(text)
+            if at < 0 or src[at:at + len(text)] != text:
+                raise MdThreadError(f"{text!r} does not occur in the text of line {line}")
+            new_line = f"{src[:at]}=={text}== [?{label}]{src[at + len(text):]}"
+            anchor_at = doc.offsets[i] + at
+        else:
+            end = len(src.rstrip(" \t"))
+            new_line = f"{src[:end]} [?{label}]{src[end:]}"
+            anchor_at = doc.offsets[i] + end
+        block = next(b for b in doc._blocks() if i in b)
+        last = block[-1]
+        if QUOTE_RE.match(src):     # ordinary quote: the thread goes after the whole quote
+            while last + 1 < doc.n and doc.kind[last + 1] == "body" and QUOTE_RE.match(doc.lines[last + 1]):
+                last += 1
+            indent = QUOTE_RE.match(src).group(1)
+        else:
+            first = doc.lines[block[0]]
+            item = LIST_ITEM_RE.match(first)
+            indent = " " * len(item.group(0)) if item else first[:len(first) - len(first.lstrip(" \t"))]
+        # after the threads that already follow the paragraph, in anchor order:
+        # before the first one whose anchor comes after the new anchor, so the
+        # order does not depend on the order of the ask calls
+        starts = {t.start: t for t in doc.threads}
+        while True:
+            k = last + 1
+            while k < doc.n and is_blank(doc.lines[k]):
+                k += 1
+            t = starts.get(k)
+            if t is None or (t.anchors and min(a.start for a in t.anchors) > anchor_at):
+                break
+            last = t.end
+        raw = list(doc.raw)
+        raw[i] = new_line + (raw[i][len(src):])
+        insert = [""] + thread_lines(indent)
+        if last + 1 < doc.n and not is_blank(doc.lines[last + 1]):
+            insert.append("")
+        raw[last + 1:last + 1] = [l + cr for l in insert]
+        new = "\n".join(raw)
+        expect_anchors = 1
+    # the edit must yield exactly this thread, answered, with only its own anchor
+    after = Document(new)
+    made = [t for t in after.threads if t.key == key]
+    if len(made) != 1 or made[0].state != "answered" or len(made[0].anchors) != expect_anchors:
+        raise MdThreadError(f"label {label!r} would not make a clean new thread here (is it "
+                            f"used by [?{label}] tokens or a link definition already?)")
+    if after.errors() or {d["code"] for d in after.diagnostics} - {d["code"] for d in doc.diagnostics}:
+        raise MdThreadError("the new thread would introduce errors or warnings; not written")
+    return new
 
 
 def remove(doc: Document, threads: list[Thread]) -> str:
@@ -668,8 +779,18 @@ def _emit(path: str, old: str, new: str, write: bool):
         print("no change")
         return
     if write:
-        with open(path, "w", encoding="utf-8", newline="") as f:
+        # compare and swap: refuse if the file changed since it was read (an
+        # edit running in parallel), so no edit silently overwrites another
+        with open(path, "r+", encoding="utf-8", newline="") as f:
+            if fcntl:
+                fcntl.flock(f, fcntl.LOCK_EX)
+            if f.read() != old:
+                raise MdThreadError(f"{path} changed since it was read (another edit at the "
+                                    f"same time?); nothing written. Run edits one at a time "
+                                    f"and re-check line numbers")
+            f.seek(0)
             f.write(new)
+            f.truncate()
         print(f"wrote {path}")
         return
     sys.stdout.writelines(difflib.unified_diff(
@@ -736,6 +857,12 @@ def cmd_reply(a) -> int:
     return 0
 
 
+def cmd_ask(a) -> int:
+    doc = _read(a.file)
+    _emit(a.file, doc.text, ask(doc, a.label, a.name, _body(a), a.timestamp, a.line, a.text), a.write)
+    return 0
+
+
 def cmd_close(a) -> int:
     doc = _read(a.file)
     ts = now_timestamp() if a.now else a.timestamp
@@ -782,9 +909,23 @@ def build_parser() -> argparse.ArgumentParser:
     g.add_argument("--body")
     g.add_argument("--body-file", help="file with the body, or - for stdin")
     s.add_argument("--timestamp", help="default: now, local time with offset")
-    s.add_argument("--force", action="store_true", help="reply even if the thread is not open")
+    s.add_argument("--force", action="store_true",
+                   help="reply to a closed thread (only when the user explicitly asks)")
     s.add_argument("--write", action="store_true")
     s.set_defaults(fn=cmd_reply)
+    s = sub.add_parser("ask", help="open a thread with a <-- question (only when told to)")
+    s.add_argument("file")
+    s.add_argument("label")
+    s.add_argument("--name", required=True, help="responder identifier, e.g. hermes/claude-opus-5-5")
+    g = s.add_mutually_exclusive_group(required=True)
+    g.add_argument("--body")
+    g.add_argument("--body-file", help="file with the body, or - for stdin")
+    s.add_argument("--line", type=int, help="1-based body line the question is about "
+                   "(default: the whole document, thread at the end)")
+    s.add_argument("--text", help="exact text on --line to mark as ==text==")
+    s.add_argument("--timestamp", help="default: now, local time with offset")
+    s.add_argument("--write", action="store_true")
+    s.set_defaults(fn=cmd_ask)
     s = sub.add_parser("close", help="append a +++ line")
     s.add_argument("file")
     s.add_argument("label")

@@ -16,7 +16,7 @@ The dispatcher ==polls every five seconds== [?why ticks].
 ```
 
 Threads are ordinary block quotes, so every Markdown renderer shows them
-sensibly. Status: spec v0.1 draft (2026-10-06). License: [MIT](LICENSE).
+sensibly. Status: spec v0.2 draft (2026-10-08). License: [MIT](LICENSE).
 
 ## Contents
 
@@ -38,6 +38,7 @@ only.
 mdthread.py list FILE [--state open|answered|closed|empty] [--json]
 mdthread.py check FILE
 mdthread.py reply FILE LABEL --name NAME (--body TEXT | --body-file PATH) [--write]
+mdthread.py ask FILE LABEL --name NAME (--body TEXT | --body-file PATH) [--line N [--text EXACT]] [--write]
 mdthread.py close FILE LABEL [--name NAME] [--now | --timestamp TS] [--reason TEXT] [--write]
 mdthread.py remove FILE (LABEL... | --closed) [--write]
 mdthread.py now
@@ -56,5 +57,5 @@ make install-skill   # link the skill into ~/.hermes/skills/productivity/
 make uninstall-skill
 ```
 
-The Neovim renderer is planned as a separate repo, `markdown-thread.nvim`,
-tested against `fixtures/`.
+Neovim support lives in a separate repo, `markdown-thread.nvim`, tested
+against `fixtures/`.

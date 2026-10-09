@@ -19,6 +19,9 @@ def run_op(text: str, op: dict) -> str:
     doc = mdthread.Document(text)
     if op["op"] == "reply":
         return mdthread.reply(doc, op["label"], op["name"], op["body"], op["timestamp"])
+    if op["op"] == "ask":
+        return mdthread.ask(doc, op["label"], op["name"], op["body"], op["timestamp"],
+                            op.get("line"), op.get("text"))
     if op["op"] == "close":
         return mdthread.close(doc, op["label"], op.get("name"), op.get("timestamp"),
                               op.get("reason"))

@@ -2,7 +2,7 @@
 
 How to discuss a Markdown document with an agent inside the document itself.
 The rules are in [SPEC.md](SPEC.md); this guide covers everyday use.
-(2026-10-06, spec v0.1)
+(2026-10-08, spec v0.2)
 
 ## 1. Ask a question
 
@@ -61,6 +61,9 @@ alone:
 
 Reload the file in your editor afterwards (`:e` in Neovim).
 
+If the agent needs something from you to answer, it asks in its reply. Answer
+with a follow-up (next section); the agent picks it up on the next run.
+
 ## 3. Follow up
 
 Add a blank `>` line, then `-->` and your message:
@@ -78,6 +81,33 @@ Add a blank `>` line, then `-->` and your message:
 
 Your name and the time after `-->` are optional (`-->` alone is fine). Write
 the message on the next line: text on the `-->` line is read as your name.
+
+Then ask the agent to "answer my follow-ups in notes/dispatch.md" (or just
+"process the threads"): a thread that ends with your `-->` is open again. If
+the agent proposed a change, "yes, do it" in a follow-up lets it apply the
+change; it says in its reply what it changed.
+
+Start every follow-up with a `-->` line. Text you type straight under the
+agent's reply, without `-->`, becomes part of the agent's message: the thread
+still looks answered and the agent won't see it as yours.
+
+### Questions from the agent
+
+The agent asks in the document only in its replies to your open threads, or
+when you tell it to, for example "leave your questions about dispatch.md as
+threads". Then it opens threads of its own, without an opening question:
+
+<!-- mdthread: example -->
+```markdown
+The dispatcher ==sleeps== [?sleep length] between ticks.
+
+> [?sleep length]
+> <-- agent/model-x @ 2026-10-08T15:00-04:00
+> Should the sleep stay fixed, or back off when idle?
+```
+
+These wait for you like any answered thread: reply with `-->`. Otherwise the
+agent asks you in the conversation, not in the file.
 
 ## 4. Close and reopen
 
@@ -98,6 +128,14 @@ blank `>` line before `+++` is required; without it the line is ordinary
 text.
 
 You can also ask the agent: "close [?why ticks] in dispatch.md".
+
+The reason is your last word on the thread. If it answers the agent's
+question or asks for a change ("b, go ahead"), the agent doesn't act on it by
+itself: it reports the reason and asks you first, because a closed thread gets
+no reply that would show the change was made. To have the agent act, reply
+with a `-->` follow-up instead of closing. You can also tell the agent to
+reply in a closed thread, for example "reply to my close note in [?why
+ticks]"; its reply makes the thread answered again.
 
 To reopen a closed thread, add a blank `>` line and another `-->` message
 after the `+++` line. The thread is open again and the agent will reply; the
@@ -144,13 +182,16 @@ The last message decides:
 
 ## 7. Editors
 
-**Neovim** (with this setup's bullets.vim and render-markdown):
+**Neovim** with markdown-thread.nvim (rendering through render-markdown):
 
-- Enter continues a `> ` line. Enter on an empty `> ` line ends the quote, and
-  with it the thread.
-- For the blank `>` line before `-->`: Enter, then Ctrl+Enter (keeps the empty
-  `> ` line), then type `> --> `. A smoother Enter is planned for
-  markdown-thread.nvim.
+- `:MdThread new` adds an anchor and a thread at the word under the cursor or
+  around a selection; an empty label is named from the text.
+- `:MdThread followup` adds the blank `>` line and `-->` at the end of the
+  thread under the cursor; `:MdThread close [reason]` closes it.
+- `:MdThread list` shows the threads in a location list that follows your
+  edits.
+- With Enter wired to the plugin (see its README), Enter on an empty `> ` line
+  inside a thread keeps the thread going; a second Enter ends it.
 - render-markdown's completion menu may pop up after `> [`; ignore it. Enter
   doesn't accept an item unless you selected one.
 

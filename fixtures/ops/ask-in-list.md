@@ -1,0 +1,3 @@
+- First item.
+- Retries are capped at three.
+- Last item.

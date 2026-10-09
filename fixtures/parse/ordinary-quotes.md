@@ -12,4 +12,4 @@
 > > [?nested] Threads inside quotes are reserved for a future version.
 > >
 > > --> Alice
-> > Not a thread in v0.1.
+> > Not a thread in v0.2.

@@ -1,0 +1,9 @@
+{
+  "op": "ask",
+  "label": "sleep length",
+  "name": "agent/model-x",
+  "timestamp": "2026-10-08T15:00-04:00",
+  "line": 4,
+  "text": "sleeps",
+  "body": "Should the sleep stay fixed, or back off when idle?"
+}
